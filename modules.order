@@ -1,3 +1,0 @@
-kernel//nfsroot/fpga_text_lcd_driver.ko
-kernel//nfsroot/fpga_push_switch_driver.ko
-kernel//nfsroot/fpga_step_motor_driver.ko
