@@ -13,11 +13,11 @@
 #include "./fpga_dot_font.h"
 
 // Driver define
-#define FPGA_TEXT_LCD_DEVICE "./fpga_text_lcd_driver.ko"
-#define FPGA_PUSH_DEVICE "./fpga_push_switch_driver.ko"
-#define FPGA_DOT_DEVICE "./fpga_dot_driver.ko"
-#define FPGA_FND_DEVICE "./fpga_fnd_driver.ko"
-#define FPGA_STEP_MOTOR_DEVICE "./fpga_step_motor_driver.ko"
+#define FPGA_TEXT_LCD_DEVICE "/dev/fpga_text_lcd"
+#define FPGA_PUSH_DEVICE "/dev/fpga_push_switch"
+#define FPGA_DOT_DEVICE "/dev/fpga_dot"
+#define FPGA_FND_DEVICE "/dev/fpga_fnd"
+#define FPGA_STEP_MOTOR_DEVICE "/dev/fpga_step_motor"
 
 // driver amount
 #define MAX_DEVICE 5
@@ -38,7 +38,7 @@
 
 
 
-int main(void)
+int main(int argc, char **agrgv)
 {
 /*******************************************************************************
  *
@@ -51,7 +51,7 @@ int main(void)
 	int myLotteryNum[6];
 	int JackpotLotteryNum[6];
 	int i = 0, j = 0; //using for any loop
-	char lcd_print_buf[2];
+	char lcd_print_buf[18];
 	/*
 	 * FPGA_STEP_MOTOR_DEVICE Set Value
 	 */
@@ -59,7 +59,7 @@ int main(void)
 	int motor_action;
 	int motor_direction;
 	int motor_speed;
-	unsigned char motor_state[3];
+	unsigned char motor_state;
 
 	/*
 	 * FPGA_TEXT_LCD_DEVICE Set Value
@@ -70,22 +70,21 @@ int main(void)
 	unsigned char lcd_string[32];
 	
 	/*
-     * FPGA_PUSH_DEVICE Set Value
-     */
+         * FPGA_PUSH_DEVICE Set Value
+         */
 	int push_sw_dev;
 	int push_buff_size;
 	unsigned char push_sw_buff[MAX_BUTTON];
-	//int retval;
+	
 
-/******************************************************************************
+
+/*******************************************************************************
  *
  *
  * Device Init Setting
  * 
  *
 *******************************************************************************/
-
-
 
 	/*
 	 * FPGA_STEP_MOTOR_DEVICE Init 
@@ -99,10 +98,11 @@ int main(void)
 		printf("Device open error : %s\n",FPGA_STEP_MOTOR_DEVICE);
 		exit(1);
 	}
+
 	
 	/*
-    * FPGA_TEXT_LCD_DEVICE Init 
-    */
+         * FPGA_TEXT_LCD_DEVICE Init 
+         */
 	memset(lcd_string, 0, sizeof(lcd_string));
 	lcd_dev = open(FPGA_TEXT_LCD_DEVICE, O_WRONLY);
 	if (lcd_dev<0) {
@@ -110,16 +110,10 @@ int main(void)
 		return -1;
 	}
 
-
+	
 	/*
-	*PUSH SWITCH  init
-	*/
-	push_sw_dev = open(FPGA_PUSH_DEVICE, O_RDWR);
-	if(push_sw_dev < 0 ){
-		printf("push switch device open error\n");
-		close(push_sw_dev);
-		return -1;
-	}
+         * FPGA_TEXT_LCD_DEVICE Init 
+         */
 	push_buff_size=sizeof(push_sw_buff); // push_sw_buff size
 
 /*******************************************************************************
@@ -130,21 +124,19 @@ int main(void)
  *
 *******************************************************************************/
 
-
 	//start lottery
-    memset(lcd_string, 0, sizeof(lcd_string));
-    lcd_str_size = strlen("One Shot Life!");
-    strncat(lcd_string, "One Shot Life!", lcd_str_size);
-    memset(lcd_string + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
+        memset(lcd_string, 0, sizeof(lcd_string));
+        lcd_str_size = strlen("One Shot Life!");
+        strncat(lcd_string, "One Shot Life!", lcd_str_size);
+        memset(lcd_string + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
 
-    lcd_str_size = strlen("Hi! Lucky5250");
-    strncat(lcd_string, "Hi! Lucky5250" , lcd_str_size);
-    memset(lcd_string + LINE_BUFF + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
-    write(lcd_dev, lcd_string, MAX_BUFF);
-
-    //intro 3sec and play app       
-    sleep(3);
-    memset(lcd_string, 0, sizeof(lcd_string));
+        lcd_str_size = strlen("Hi! Lucky5250");
+        strncat(lcd_string, "Hi! Lucky5250" , lcd_str_size);
+        memset(lcd_string + LINE_BUFF + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
+        write(lcd_dev, lcd_string, MAX_BUFF);
+        //intro 3sec and play app       
+        usleep(3000000);
+        memset(lcd_string, 0, sizeof(lcd_string));
 		
 	while(1){
 		
@@ -156,52 +148,30 @@ int main(void)
 		 2.Auto
 		 3.Check Jackpot	
 		*/
-		memset(lcd_string, 0, sizeof(lcd_string));
-        lcd_str_size = strlen("1.Self 2.Auto");
-        strncat(lcd_string, "1.Self 2.Auto", lcd_str_size);
-        memset(lcd_string + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
+                memset(lcd_string, 0, sizeof(lcd_string));
+                lcd_str_size = strlen("1.Self 2.Auto");
+                strncat(lcd_string, "1.Self 2.Auto", lcd_str_size);
+                memset(lcd_string + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
 
-        lcd_str_size = strlen("3.CheckJackpot");
-        strncat(lcd_string, "3.CheckJackpot" , lcd_str_size);
-        memset(lcd_string + LINE_BUFF + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
-        write(lcd_dev, lcd_string, MAX_BUFF);
-
+                lcd_str_size = strlen("3.CheckJackpot");
+                strncat(lcd_string, "3.CheckJackpot" , lcd_str_size);
+                memset(lcd_string + LINE_BUFF + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
+                write(lcd_dev, lcd_string, MAX_BUFF);
+		
 		//input menu
-		//TODO : switch testing................ have to fix it
 		read(push_sw_dev, &push_sw_buff, push_buff_size);
-		if (push_sw_buff[0] == 1) {
-			menunum = 1;
-			printf("push 0\n");
-			push_sw_buff[0] == 0;
+		if (push_sw_buff[1]) {
+			menunum = 1;	
 		}
-		else if (push_sw_buff[1] == 1) {
-			menunum = 1;
-			printf("push 1\n");
-			push_sw_buff[1] == 0;
-		}
-		else if (push_sw_buff[2] == 1) {
+		else if (push_sw_buff[2]) {
 			menunum = 2;
-			printf("push 2\n");
-			push_sw_buff[2] == 0;
+		
 		}
-		else if (push_sw_buff[3] == 1) {
+		else if (push_sw_buff[3]) {
 			menunum = 3;
-			printf("push 3\n");
-			push_sw_buff[3] == 0;
-		}
-		else if (push_sw_buff[4] == 1) {
-			menunum = 4;
-			printf("push 4\n");
-			push_sw_buff[4] == 0;
-		}
-		else if (push_sw_buff[5] == 1) {
-			menunum = 5;
-			printf("push 5\n");
-			push_sw_buff[5] == 0;
 		}
 		else{// other push_sw handling
 			menunum = 0;
-			printf("push other\n");
 			continue;
 		}	
 
@@ -243,7 +213,7 @@ int main(void)
 				
 					myLotteryNum[i] = (rand() % 45) + 1;
 					while(1){//check for Redundancy number
-						if(myLotteryNum[j] != myLotteryNum[i] || j != i){
+						if(myLottery[j] != myLottery[i] || j != i){
 							myLotteryNum[i] = (rand() % 45) + 1;
 							j = 0; 
 							break;
@@ -258,8 +228,8 @@ int main(void)
 				        // init memset
 				        memset(lcd_string, 0, sizeof(lcd_string));
 				        // show Linie 1
-				        lcd_str_size = 2;//strlen((char) myLotteryNum[i]);
-				        strncat(lcd_string, itoa(myLotteryNum[i], lcd_print_buf,10), lcd_str_size);
+				        lcd_str_size = strlen((char) myLottery[i]);
+				        strncat(lcd_string, (char) myLottery[i], lcd_str_size);
 				        memset(lcd_string + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
 				        //show Line 2
 				        lcd_str_size = strlen("Lucky No.6 : ");
@@ -293,15 +263,15 @@ int main(void)
 	//Motor Use
 	// Motor Spin 3sec - Do Wirte FPGA_STEP_MOTOR_DEVICE
 	motor_state[0]=(unsigned char)1;
-    motor_state[1]=(unsigned char)1;
-    motor_state[2]=(unsigned char)50;
+        motor_state[1]=(unsigned char)1;
+        motor_state[2]=(unsigned char)50;
 	write(motor_dev,motor_state,3);
 	sleep(3);
 	// Motor Stop - Do Wirte FPGA_STEP_MOTOR_DEVICE
-    motor_state[0]=(unsigned char)0;
-    motor_state[1]=(unsigned char)0;
-    motor_state[2]=(unsigned char)0;
-    write(motor_dev,motor_state,3);
+        motor_state[0]=(unsigned char)0;
+        motor_state[1]=(unsigned char)0;
+        motor_state[2]=(unsigned char)0;
+        write(motor_dev,motor_state,3);
 
 
 	//LCD Use
@@ -337,3 +307,6 @@ int main(void)
 
 	return 0;
 }
+
+
+
