@@ -13,11 +13,11 @@
 #include "./fpga_dot_font.h"
 
 // Driver define
-#define FPGA_TEXT_LCD_DEVICE "./fpga_text_lcd_driver.ko"
-#define FPGA_PUSH_DEVICE "./fpga_push_switch_driver.ko"
-#define FPGA_DOT_DEVICE "./fpga_dot_driver.ko"
-#define FPGA_FND_DEVICE "./fpga_fnd_driver.ko"
-#define FPGA_STEP_MOTOR_DEVICE "./fpga_step_motor_driver.ko"
+#define FPGA_TEXT_LCD_DEVICE "dev/fpga_text_lcd_driver.ko"
+#define FPGA_PUSH_DEVICE "dev/fpga_push_switch_driver.ko"
+#define FPGA_DOT_DEVICE "dev/fpga_dot_driver.ko"
+#define FPGA_FND_DEVICE "dev/fpga_fnd_driver.ko"
+#define FPGA_STEP_MOTOR_DEVICE "dev/fpga_step_motor_driver.ko"
 
 // driver amount
 #define MAX_DEVICE 5
@@ -40,56 +40,40 @@
 
 int main(void)
 {
-/*******************************************************************************
- *
- *
- * Device Values Define
- * 
- *
-*******************************************************************************/
+/* Device Values Define*/
+
 	int menunum = 0;
 	int myLotteryNum[6];
 	int JackpotLotteryNum[6];
 	int i = 0, j = 0; //using for any loop
 	char lcd_print_buf[2];
-	/*
-	 * FPGA_STEP_MOTOR_DEVICE Set Value
-	 */
+	
+	//FPGA_STEP_MOTOR_DEVICE Set Value
 	int motor_dev;
 	int motor_action;
 	int motor_direction;
 	int motor_speed;
 	unsigned char motor_state[3];
 
-	/*
-	 * FPGA_TEXT_LCD_DEVICE Set Value
-	 */
+	
+	//FPGA_TEXT_LCD_DEVICE Set Value
 	int lcd_dev;
 	int lcd_str_size;
 	int lcd_chk_size;
 	unsigned char lcd_string[32];
 	
-	/*
-     * FPGA_PUSH_DEVICE Set Value
-     */
+	
+    //FPGA_PUSH_DEVICE Set Value 
 	int push_sw_dev;
 	int push_buff_size;
 	unsigned char push_sw_buff[MAX_BUTTON];
 	//int retval;
 
-/******************************************************************************
- *
- *
- * Device Init Setting
- * 
- *
-*******************************************************************************/
 
 
+/* Device Init Setting */
 
-	/*
-	 * FPGA_STEP_MOTOR_DEVICE Init 
-	 */ 
+	//FPGA_STEP_MOTOR_DEVICE Init 
 	memset(motor_state,0,sizeof(motor_state));
 	motor_state[0]=(unsigned char)0;
 	motor_state[1]=(unsigned char)0;
@@ -100,9 +84,8 @@ int main(void)
 		exit(1);
 	}
 	
-	/*
-    * FPGA_TEXT_LCD_DEVICE Init 
-    */
+	
+    //FPGA_TEXT_LCD_DEVICE Init 
 	memset(lcd_string, 0, sizeof(lcd_string));
 	lcd_dev = open(FPGA_TEXT_LCD_DEVICE, O_WRONLY);
 	if (lcd_dev<0) {
@@ -111,9 +94,8 @@ int main(void)
 	}
 
 
-	/*
-	*PUSH SWITCH  init
-	*/
+	
+	//PUSH SWITCH  init 
 	push_sw_dev = open(FPGA_PUSH_DEVICE, O_RDWR);
 	if(push_sw_dev < 0 ){
 		printf("push switch device open error\n");
@@ -122,14 +104,9 @@ int main(void)
 	}
 	push_buff_size=sizeof(push_sw_buff); // push_sw_buff size
 
-/*******************************************************************************
- *
- *
- * Application
- * 
- *
-*******************************************************************************/
 
+
+/* Application */
 
 	//start lottery
     memset(lcd_string, 0, sizeof(lcd_string));
@@ -259,7 +236,8 @@ int main(void)
 				        memset(lcd_string, 0, sizeof(lcd_string));
 				        // show Linie 1
 				        lcd_str_size = 2;//strlen((char) myLotteryNum[i]);
-				        strncat(lcd_string, itoa(myLotteryNum[i], lcd_print_buf,10), lcd_str_size);
+				        //strncat(lcd_string, itoa(myLotteryNum[i], lcd_print_buf,10), lcd_str_size);
+						
 				        memset(lcd_string + lcd_str_size, ' ', LINE_BUFF - lcd_str_size);
 				        //show Line 2
 				        lcd_str_size = strlen("Lucky No.6 : ");
@@ -323,13 +301,7 @@ int main(void)
 	read(push_sw_dev, &push_sw_buff, push_buff_size);
 	
 
-/*******************************************************************************
- *
- *
- * Device Close
- * 
- *
-*******************************************************************************/
+/* Device Close */
 	close(motor_dev);
 	close(lcd_dev);	
 	close(push_sw_dev);	

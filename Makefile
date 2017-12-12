@@ -2,7 +2,7 @@
 
 obj-m   := fpga_text_lcd_driver.o fpga_push_switch_driver.o fpga_step_motor_driver.o
 
-KDIR    := /work/achro5250/kernel/
+KDIR    := /work/achro5250/kernel
 PWD     := $(shell pwd)
 APP	:= oneshot
 
@@ -14,6 +14,9 @@ driver:
 
 app:
 	arm-none-linux-gnueabi-gcc -static -o $(APP) $(APP).c 
+	arm-none-linux-gnueabi-gcc -static -o $(APP) $(APP).c 
+	arm-none-linux-gnueabi-gcc -static -o $(APP) $(APP).c 
+
 
 install:
 	cp -a fpga_step_motor_driver.ko /nfsroot
