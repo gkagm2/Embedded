@@ -1,1 +1,0 @@
-cmd_/work/achro5250/fpga_driver/fpga_led/fpga_led_driver.ko := arm-none-linux-gnueabi-ld -EL -r  -T /work/achro5250/kernel-20130306/scripts/module-common.lds --build-id  -o /work/achro5250/fpga_driver/fpga_led/fpga_led_driver.ko /work/achro5250/fpga_driver/fpga_led/fpga_led_driver.o /work/achro5250/fpga_driver/fpga_led/fpga_led_driver.mod.o
