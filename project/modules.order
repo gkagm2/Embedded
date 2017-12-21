@@ -1,0 +1,7 @@
+kernel//nfsroot/sample1/fpga_text_lcd_driver.ko
+kernel//nfsroot/sample1/fpga_push_switch_driver.ko
+kernel//nfsroot/sample1/fpga_buzzer_driver.ko
+kernel//nfsroot/sample1/fpga_dot_driver.ko
+kernel//nfsroot/sample1/fpga_fnd_driver.ko
+kernel//nfsroot/sample1/fpga_led_driver.ko
+kernel//nfsroot/sample1/fpga_step_motor_driver.ko
