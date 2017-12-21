@@ -162,12 +162,48 @@ int main(void)
 		}
 
 
+		if(LottEmptyCheck == 7)
+			break;
+
 		//excute menu
 		switch (menunum) {
 		case 1: //self select lottery number
 			//TODO : input push_Sw & show lcd
 			//show lcd sample
 
+
+			for(i=0 ; i< 6; i++){
+				if(push_sw_buff[0]= 1){ //10 up 
+					if(lottoNum <= 45 && lottoNum >0){ 
+						myLotteryNum[i] += 10;
+					}
+					push_sw_buff[0] = 0;
+	
+				} else if(push_sw_buff[1]== 1){ //1 up
+					
+					if(lottoNum <= 45 && lottoNum >0){ 
+						myLotteryNum[i] += 1;
+					}
+					push_sw_buff[1] = 0;
+	
+				} else if(push_sw_buff[2] == 1){ // comfirm
+					if(myLotteryNum[i] != 0){
+						LottEmptyCheck++;
+					}
+					push_sw_buff[2] = 0;
+	
+				} else if(push_sw_buff[3]  == 1){ // 10 down
+					if(myLotteryNum[i] - 10 > 0 && myLotteryNum[i] - 10 <=45)
+						myLotteryNum[i] -= 10;
+					push_sw_buff[3] = 0;
+	
+				} else if(push_sw_buff[4]  == 1){ // 1 down
+					if(myLotteryNum[i] - 1 > 0 && myLotteryNum[i] - 1 <=45)
+						myLotteryNum[i] -= 1;
+					push_sw_buff[4] = 0;
+				}
+			}
+				
 			i = 0;
 			j = 0;
 			menunum = 0;
