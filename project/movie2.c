@@ -41,13 +41,13 @@ int main(void)
 {
 	/* Device Values Define*/
 
-	int menunum = 0;
-	int myLotteryNum[6];
-	int JackpotLotteryNum[6];
+	int menunum = 0; //메뉴 선택
+	int myLotteryNum[6]; //나의 로또 번호
+	int JackpotLotteryNum[6]; //당첨 로또 번호
 	int i = 0, j = 0; //using for any loop
-	char lcd_print_buf[2];
-	int myrank = 6;
-	int flowflag = 0;
+	char lcd_print_buf[2]; //LCD가 2줄로 출력됨
+	int myrank = 6; //당첨번호랑 내 번호랑 비교해서 계산되는 등수임
+	int flowflag = 0; //흐름 플래그
 
 	//FPGA_STEP_MOTOR_DEVICE Set Value
 	int motor_dev;
@@ -65,9 +65,9 @@ int main(void)
 
 
 	//FPGA_PUSH_DEVICE Set Value 
-	int push_sw_dev;
-	int push_buff_size;
-	unsigned char push_sw_buff[MAX_BUTTON];
+	int push_sw_dev; //장치
+	int push_buff_size; //사이즈
+	unsigned char push_sw_buff[MAX_BUTTON]; //각 배열의 index마다 버튼값이 지정. 누르면 1 안누르면 0으로 설정 될 배열 선언
 	//int retval;
 
 
@@ -165,8 +165,10 @@ int main(void)
 		//excute menu
 		switch (menunum) {
 		case 1: //self select lottery number
-			//TODO : input push_Sw & show lcd
+			//TODO : input push_Sw & show lcd  현명 파트
 			//show lcd sample
+
+
 
 			i = 0;
 			j = 0;
