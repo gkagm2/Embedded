@@ -4,7 +4,7 @@ obj-m   := fpga_text_lcd_driver.o fpga_push_switch_driver.o fpga_buzzer_driver.o
 
 KDIR    := /work/achro5250/kernel
 PWD     := $(shell pwd)
-APP	:= movie
+APP	:= oneshot
 
 all: driver app
 #all: driver 
